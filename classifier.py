@@ -65,6 +65,12 @@ def get_features(X) :
 
 		distances['feature'] = key
 		distances['distance'] = distance_squared
+
+	for feature in distances :
+		print feature + " is " + distances[feature] + " away from the labels."
+
+	#for (distance,feature) in sorted(distances, key=distances.__getitem__)
+
 	return features
 
 #vectorize feature dictionaries and return feature and label matricies
