@@ -15,18 +15,56 @@ def get_data(filename):
 	random.shuffle(data)
 	return data
 
+def get_labels() :
+	data = get_data('articles')
+	labels = []
+	for (label, article) in data :
+		labels.append(label)
+	return labels
+
 #this is the main function you care about; pack all the cleverest features you can think of into here.
 def get_features(X) : 
 	features = []
 	for x in X : 
-		#x is an article in string form
+		#x is an article in string form - corresponds to a row of the matrix
+		#each feature is a column of the matrix
+		#putting all words in as a feature is a very strong baseline - we have to try to beat it
 		f = {}
+		x_lower = [word.lower() for word in x.split()]
 		#TODO replace this dummy feature function with a unigram model, like we did in class
-		if "shooting" in x.split() :
+		for word in x_lower :
+			f[word] = 1
+		"""
+		When creating features for all words:
+		Statistical classification
+		Fold 0 : 0.98298
+		Fold 1 : 0.98388
+		Fold 2 : 0.98256
+		Fold 3 : 0.98256
+		Fold 4 : 0.98256
+		Test Average : 0.98291
+		"""
+		if "shooting" in x_lower :
 			f['shooting'] = 1
-		else :
-			f['shooting'] = 0
+
+		if "gun" in x_lower :
+			f['gun'] = 1
 		features.append(f)
+	labels = get_labels()
+	distances = {}
+	#rows are articles, columns are features
+	for key in features[0].keys() :
+		vector = []
+		for article in features :
+			vector.append(article[key])
+		
+		distance_squared = 0
+		for i in range(len[labels]) :
+			if labels[i]!=vector[i] :
+				distance_squared += 1
+
+		distances['feature'] = key
+		distances['distance'] = distance_squared
 	return features
 
 #vectorize feature dictionaries and return feature and label matricies
@@ -71,14 +109,30 @@ def rule_based_classifier(data):
 	for label, text in data : 
 		prediction = '0'
 		#TODO add more keywords, see how well they do alone and in combination
-		#if "news" in text : prediction = '0' - removing brought average up
-		if "shooting" in text : prediction = '1' #removing dropped accuracy considerably but raised average very slightly
-		#if "shot" in text : prediction = '1' - removing brought accuracy up considerably (~1.7%) but dropped average slightly (0.3%)
-		if "gun" in text : prediction = '1' #removing brought accuracy up but average down
-		if "murder" in text : prediction = '1' #removing brought accuracy up but average down
-		#if "pistol" in text : prediction = '1' - removing brought numbers up
-		#if "rifle" in text : prediction = '1' - removing brought numbers up
-		#if "handgun" in text : prediction = '1' - removing brought average up
+		#if "news" in text : prediction = '0' - no effect on accuracy
+		if "shooting" in text : prediction = '1' #increases accuracy considerably
+		#if "shot" in text : prediction = '1' - decreases accuracy considerably (~1.7%)
+		#if "gun" in text : prediction = '1' - decreases accuracy
+		#if "murder" in text : prediction = '1' - decreases accuracy
+		#if "pistol" in text : prediction = '1' - decreases accuracy
+		#if "rifle" in text : prediction = '1' - decreases accuracy
+		if "handgun" in text : prediction = '1' #no effect on accuracy
+		if "man shot" in text : prediction = '1' #increases accuracy
+		if "woman shot" in text : prediction = '1' #no effect on accuracy
+		if "person shot" in text : prediction = '1' #increases accuracy
+		if "people shot" in text : prediction = '1' #increases accuracy
+		if "child shot" in text : prediction = '1' #increases accuracy
+		if "was shot" in text : prediction = '1' #increases accuracy
+		if "got shot" in text : prediction = '1' #increases accuracy
+		if "been shot" in text : prediction = '1' #increases accuracy
+		if "were shot" in text : prediction = '1' #increases accuracy
+		#if "shot at" in text : prediction = '1' - decreases accuracy
+		#if "shooter" in text : prediction = '1' - decreases accuracy
+		if "children shot" in text : prediction = '1' #no effect on accuracy
+		#if " shoot " in text : prediction = '1' - decreases accuracy
+		#if "shoot" in text : prediction = '1' - decreases accuracy
+		#if "shoot him" in text : prediction = '1' - decreases accuracy
+		#if "shoot her" in text : prediction = '1' - decreases accuracy
 		if prediction == label : correct += 1
 		total += 1
 	print 'Rule-based classifier accuracy: %.05f'%(correct / total)
@@ -96,7 +150,8 @@ def get_misclassified_examples(y, X, texts) :
 	clf = train_classifier(x_train, y_train)
 
 	#TODO: You will have to write some code to call your classifier on each of the test examples, and check whether its prediction was right or wrong
-
+	#for x in x_test :
+	#	clf.predict(x)
 
 if __name__ == '__main__' : 
 
