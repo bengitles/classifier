@@ -19,9 +19,13 @@ def get_data(filename):
 def get_features(X) : 
 	features = []
 	for x in X : 
+		#x is an article in string form
 		f = {}
 		#TODO replace this dummy feature function with a unigram model, like we did in class
-		f['useless feature'] =  1.0
+		if "shooting" in x.split() :
+			f['shooting'] = 1
+		else :
+			f['shooting'] = 0
 		features.append(f)
 	return features
 
@@ -67,10 +71,14 @@ def rule_based_classifier(data):
 	for label, text in data : 
 		prediction = '0'
 		#TODO add more keywords, see how well they do alone and in combination
-		if "shooting" in text : prediction = '1'
-		if "gun" in text : prediction = '1'
-		if "murder" in text : prediction = '1'
-		if "police" in text and "said" in text : prediction = '1'
+		#if "news" in text : prediction = '0' - removing brought average up
+		if "shooting" in text : prediction = '1' #removing dropped accuracy considerably but raised average very slightly
+		#if "shot" in text : prediction = '1' - removing brought accuracy up considerably (~1.7%) but dropped average slightly (0.3%)
+		if "gun" in text : prediction = '1' #removing brought accuracy up but average down
+		if "murder" in text : prediction = '1' #removing brought accuracy up but average down
+		#if "pistol" in text : prediction = '1' - removing brought numbers up
+		#if "rifle" in text : prediction = '1' - removing brought numbers up
+		#if "handgun" in text : prediction = '1' - removing brought average up
 		if prediction == label : correct += 1
 		total += 1
 	print 'Rule-based classifier accuracy: %.05f'%(correct / total)

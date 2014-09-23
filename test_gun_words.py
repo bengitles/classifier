@@ -78,5 +78,4 @@ man
 two
 also
 would
-
 """
