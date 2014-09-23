@@ -29,14 +29,54 @@ for (label, article) in data :
 				gun_words_freq.append(1)
 
 """
-maxFreq = 0
-for i in range (0,20) :
-	for freq in gun_words_freq :
-		print freq
-		if freq >= maxFreq :
-			print freq
-			maxFreq = freq
-	print gun_words[gun_words_freq.index(maxFreq)] + ": " + str(maxFreq)
-	gun_words_freq[gun_words_freq.index(maxFreq)] = 0
-	maxFreq = 0
+Order of words reaching the 1000 threshold for gun-related articles (label =="1"):
+police
+said
+said.
+shot
+man
+shooting
+according
+gun
+block
+p.m.
+two
+county
+one
+found
+home
+told
+taken
+victim
+officers
+hospital
+say
+woman
+people
+around
+
+Order of words reaching the 1000 threshold for non-gun-related articles (label =="0"):
+-
+news
+...
+2014
+ad
+id:
+new
+home
+sep
+said
+day
+one
+said.
+--
+police
+-h-
+service
+county
+man
+two
+also
+would
+
 """
