@@ -89,7 +89,7 @@ def get_misclassified_examples(y, X, texts) :
 
 if __name__ == '__main__' : 
 
-	raw_data = get_data(sys.argv[1])
+	raw_data = get_data('articles')
 	
 	print '\nRule-based classification'
 	rule_based_classifier(raw_data)
