@@ -188,8 +188,18 @@ def get_misclassified_examples(y, X, texts) :
     clf = train_classifier(x_train, y_train)
 
     #TODO: You will have to write some code to call your classifier on each of the test examples, and check whether its prediction was right or wrong
-    #for x in x_test :
-    #    clf.predict(x)
+    for x in x_test :
+        print x
+        prediction = clf.predict(x)
+        print prediction
+       
+
+    for t in test_texts:
+        print t
+        print '---------------------------------'
+        
+
+        
 
 if __name__ == '__main__' : 
 
@@ -206,5 +216,5 @@ if __name__ == '__main__' :
     print X.shape
     cross_validate(X,y)
 
-    get_top_features(X, y, dv)
-#    get_misclassified_examples(y, X, texts)
+#    get_top_features(X, y, dv)
+    get_misclassified_examples(y, X, texts)
