@@ -20,6 +20,7 @@ def get_labels() :
     labels = []
     for (label, article) in data :
         labels.append(int(label))
+    print len(labels)
     return labels
 
 #this is the main function you care about; pack all the cleverest features you can think of into here.
@@ -76,11 +77,8 @@ def calculate_feature_distances(features, feature_set) :
 
         #[distance_squared += 1 for i in xrange(len(labels)) if labels[i] != vector[i]]
 
-        distances['feature'] = column
-        distances['distance'] = distance_squared
-
-    for feature in distances :
-        print feature + " is " + distances[feature] + " away from the labels."
+        distances[column] = distance_squared
+        print column + " is " + str(distance_squared) + " away from the labels."        
 
     #for (distance,feature) in sorted(distances, key=distances.__getitem__)
 
