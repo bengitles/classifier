@@ -25,6 +25,7 @@ def get_labels() :
 #this is the main function you care about; pack all the cleverest features you can think of into here.
 def get_features(X) : 
 	features = []
+	feature_set = set()
 	for x in X : 
 		#x is an article in string form - corresponds to a row of the matrix
 		#each feature is a column of the matrix
@@ -34,6 +35,7 @@ def get_features(X) :
 		#TODO replace this dummy feature function with a unigram model, like we did in class
 		for word in x_lower :
 			f[word] = 1
+			feature_set.add(word)
 		"""
 		When creating features for all words:
 		Statistical classification
@@ -44,20 +46,27 @@ def get_features(X) :
 		Fold 4 : 0.98256
 		Test Average : 0.98291
 		"""
+		"""
 		if "shooting" in x_lower :
 			f['shooting'] = 1
 
 		if "gun" in x_lower :
 			f['gun'] = 1
+		"""
 		features.append(f)
+	calculate_feature_distances(features,feature_set)
+	return features
+
+def calculate_feature_distances(features, feature_set) :
 	labels = get_labels()
 	distances = {}
 	#rows are articles, columns are features
-	for key in features[0].keys() :
+	for column in feature_set :
 		vector = []
-		for article in features :
-			vector.append(article[key])
-		
+		for row in features :
+			print row[column]
+			vector.append(row[column])
+
 		distance_squared = 0
 		for i in range(len[labels]) :
 			if labels[i]!=vector[i] :
@@ -70,8 +79,6 @@ def get_features(X) :
 		print feature + " is " + distances[feature] + " away from the labels."
 
 	#for (distance,feature) in sorted(distances, key=distances.__getitem__)
-
-	return features
 
 #vectorize feature dictionaries and return feature and label matricies
 def get_matricies(data) : 
