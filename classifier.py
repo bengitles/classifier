@@ -1,8 +1,10 @@
 #!/bin/python
 
+import string
 import sys
 import random
 import operator
+import numpy as np
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.linear_model import LogisticRegression
 from sklearn.preprocessing import LabelEncoder
@@ -17,10 +19,7 @@ def get_data(filename):
 
 def get_labels() :
     data = get_data('articles')
-    labels = []
-    for (label, article) in data :
-        labels.append(int(label))
-    print len(labels)
+    labels = [int(label) for (label, _) in data]
     return labels
 
 #this is the main function you care about; pack all the cleverest features you can think of into here.
@@ -32,9 +31,10 @@ def get_features(X) :
         #each feature is a column of the matrix
         #putting all words in as a feature is a very strong baseline - we have to try to beat it
         f = {}
-        x_lower = [word.lower() for word in x.split()]
-        #TODO replace this dummy feature function with a unigram model, like we did in class
+        x_lower = [word.translate(string.maketrans('',''), string.punctuation).lower() for word in x.split()]
         for word in x_lower :
+            # if word not in f:
+            #   f[word] = 0
             f[word] = 1
             feature_set.add(word)
         """
@@ -66,21 +66,18 @@ def calculate_feature_distances(features, feature_set) :
         vector = []
         for row in features :
             if column in row :
-                vector.append(1)
+                vector.extend([1])
             else :
-                vector.append(0)
+                vector.extend([0])
 
-        distance_squared = 0
-        for i in xrange(len(labels)) :
-            if labels[i]!=vector[i] :
-                distance_squared += 1
-
-        #[distance_squared += 1 for i in xrange(len(labels)) if labels[i] != vector[i]]
+        distance_squared = sum([1 for i in xrange(len(labels)) if labels[i] != vector[i]])
 
         distances[column] = distance_squared
-        print column + " is " + str(distance_squared) + " away from the labels."        
+        #print column + " is " + str(distance_squared) + " away from the labels."   
 
-    #for (distance,feature) in sorted(distances, key=distances.__getitem__)
+    top_hun_words = sorted(distances.items(), key = lambda x: x[1])[:100]  
+    for word, distance in top_hun_words:
+      print word + " is " + str(distance) + " away from the labels."      
 
 #vectorize feature dictionaries and return feature and label matricies
 def get_matricies(data) : 
@@ -182,4 +179,3 @@ if __name__ == '__main__' :
 
 #    get_top_features(X, y, dv)
 #    get_misclassified_examples(y, X, texts)
-
