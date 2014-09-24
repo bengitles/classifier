@@ -207,6 +207,7 @@ def get_misclassified_examples(y, X, texts) :
 
         
 
+print "hello world!"
 if __name__ == '__main__' : 
 
     raw_data = get_data('articles')
@@ -221,6 +222,5 @@ if __name__ == '__main__' :
     print 'x'
     print X.shape
     cross_validate(X,y)
-
 #    get_top_features(X, y, dv)
     get_misclassified_examples(y, X, texts)
