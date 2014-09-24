@@ -19,7 +19,7 @@ def get_labels() :
 	data = get_data('articles')
 	labels = []
 	for (label, article) in data :
-		labels.append(label)
+		labels.append(int(label))
 	return labels
 
 #this is the main function you care about; pack all the cleverest features you can think of into here.
@@ -64,15 +64,19 @@ def calculate_feature_distances(features, feature_set) :
 	for column in feature_set :
 		vector = []
 		for row in features :
-			print row[column]
-			vector.append(row[column])
+			if column in row :
+				vector.append(1)
+			else :
+				vector.append(0)
 
 		distance_squared = 0
-		for i in range(len[labels]) :
+		for i in xrange(len(labels)) :
 			if labels[i]!=vector[i] :
 				distance_squared += 1
 
-		distances['feature'] = key
+		#[distance_squared += 1 for i in xrange(len(labels)) if labels[i] != vector[i]]
+
+		distances['feature'] = column
 		distances['distance'] = distance_squared
 
 	for feature in distances :
@@ -146,6 +150,7 @@ def rule_based_classifier(data):
 		#if "shoot" in text : prediction = '1' - decreases accuracy
 		#if "shoot him" in text : prediction = '1' - decreases accuracy
 		#if "shoot her" in text : prediction = '1' - decreases accuracy
+		#if "police" in text : prediction = '1' - decreases accuracy
 		if prediction == label : correct += 1
 		total += 1
 	print 'Rule-based classifier accuracy: %.05f'%(correct / total)
