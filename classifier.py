@@ -42,8 +42,9 @@ def get_features(X) :
         #each feature is a column of the matrix
         #putting all words in as a feature is a very strong baseline - we have to try to beat it
         f = {}
-        x_lower = [word.strip(string.punctuation).lower() for word in x.split()]
-        for word in x_lower:
+        #f['useless feature'] =  1.0
+        x_lower = [word.translate(string.maketrans('',''), string.punctuation).lower() for word in x.split()]
+        for word in x_lower :
             #if word not in f:
             #   f[word] = 0
             if word not in stopwords:
@@ -73,7 +74,12 @@ def get_features(X) :
             f['gun'] = 1
         """
         features.append(f)
+<<<<<<< HEAD
     #calculate_feature_distances(features,feature_set)
+=======
+    #calculate_best_features(features,feature_set)
+    print "Num features: " + len(feature_set)
+>>>>>>> played around to answer questionnaire
     return features
 
 def calculate_best_features(features, feature_set) :
@@ -143,16 +149,16 @@ def rule_based_classifier(data):
     for label, text in data : 
         prediction = '0'
         #TODO add more keywords, see how well they do alone and in combination
-        #if "news" in text : prediction = '0' - no effect on accuracy
+        #if "news" in text : prediction = '0' #- no effect on accuracy
         if "shooting" in text : prediction = '1' #increases accuracy considerably
-        #if "shot" in text : prediction = '1' - decreases accuracy considerably (~1.7%)
-        #if "gun" in text : prediction = '1' - decreases accuracy
-        #if "murder" in text : prediction = '1' - decreases accuracy
-        #if "pistol" in text : prediction = '1' - decreases accuracy
-        #if "rifle" in text : prediction = '1' - decreases accuracy
-        if "handgun" in text : prediction = '1' #no effect on accuracy
+        #if "shot" in text : prediction = '1' #- decreases accuracy considerably
+        #if "gun" in text : prediction = '1'# - decreases accuracy
+        #if "murder" in text : prediction = '1' #- decreases accuracy
+        #if "pistol" in text : prediction = '1' #- decreases accuracy
+        #if "rifle" in text : prediction = '1' #- decreases accuracy
+        if "handgun" in text : prediction = '1' #increases accuracy
         if "man shot" in text : prediction = '1' #increases accuracy
-        if "woman shot" in text : prediction = '1' #no effect on accuracy
+        #if "woman shot" in text : prediction = '1' #no effect on accuracy
         if "person shot" in text : prediction = '1' #increases accuracy
         if "people shot" in text : prediction = '1' #increases accuracy
         if "child shot" in text : prediction = '1' #increases accuracy
@@ -160,14 +166,14 @@ def rule_based_classifier(data):
         if "got shot" in text : prediction = '1' #increases accuracy
         if "been shot" in text : prediction = '1' #increases accuracy
         if "were shot" in text : prediction = '1' #increases accuracy
-        #if "shot at" in text : prediction = '1' - decreases accuracy
-        #if "shooter" in text : prediction = '1' - decreases accuracy
-        if "children shot" in text : prediction = '1' #no effect on accuracy
-        #if " shoot " in text : prediction = '1' - decreases accuracy
-        #if "shoot" in text : prediction = '1' - decreases accuracy
-        #if "shoot him" in text : prediction = '1' - decreases accuracy
-        #if "shoot her" in text : prediction = '1' - decreases accuracy
-        #if "police" in text : prediction = '1' - decreases accuracy
+        #if "shot at" in text : prediction = '1' #- decreases accuracy
+        #if "shooter" in text : prediction = '1'# - decreases accuracy
+        #if "children shot" in text : prediction = '1' #no effect on accuracy
+        #if " shoot " in text : prediction = '1' #- decreases accuracy
+        #if "shoot" in text : prediction = '1' #- decreases accuracy
+        #if "shoot him" in text : prediction = '1' #- decreases accuracy
+        #if "shoot her" in text : prediction = '1'# - decreases accuracy
+        #if "police" in text : prediction = '1' #- decreases accuracy
         if prediction == label : correct += 1
         total += 1
     print 'Rule-based classifier accuracy: %.05f'%(correct / total)
