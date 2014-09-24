@@ -25,21 +25,36 @@ def get_labels() :
     labels = [int(label) for (label, _) in data]
     return labels
 
+def get_stopwords():
+    stopwords = set()
+    for line in open('stopwords.txt', 'r'):
+        stopwords.add(line.strip())
+    return stopwords
+
 #this is the main function you care about; pack all the cleverest features you can think of into here.
 def get_features(X) : 
     features = []
     feature_set = set()
+    stopwords = get_stopwords()
+    rule_bigrams = ['man shot', 'person shot', 'people shot', 'child shot', 'was shot', 'got shot', 'been shot', 'were shot']
     for x in X : 
         #x is an article in string form - corresponds to a row of the matrix
         #each feature is a column of the matrix
         #putting all words in as a feature is a very strong baseline - we have to try to beat it
         f = {}
-        x_lower = [word.translate(string.maketrans('',''), string.punctuation).lower() for word in x.split()]
-        for word in x_lower :
+        x_lower = [word.strip(string.punctuation).lower() for word in x.split()]
+        for word in x_lower:
             #if word not in f:
             #   f[word] = 0
-            f[word] = 1
-            feature_set.add(word)
+            if word not in stopwords:
+                f[word] = 1
+                feature_set.add(word)
+
+        # hardcode bigram features
+        for bigram in rule_bigrams:
+            if bigram in x.lower():
+                f[bigram] = 1
+                feature_set.add(bigram)
         """
         When creating features for all words:
         Statistical classification
@@ -66,10 +81,6 @@ def calculate_best_features(features, feature_set) :
     print len(features)
     print len(features[0])
     print len(labels)
-    #best_features = SelectKBest(chi2, k=2).fit_transform(features, labels)
-    #for feature in best_features :
-    #    print feature
-    #return best_features
     
     distances = {}
     #rows are articles, columns are features
@@ -166,9 +177,12 @@ def get_top_features(X, y, dv):
     clf = train_classifier(X, y)
     #the DictVectorizer object remembers which column number corresponds to which feature, and return the feature names in the correct order
     feature_names = dv.get_feature_names() 
-
+    rule_words = ['shooting', 'handgun', 'man shot', 'person shot', 'people shot', 'child shot', 'was shot', 'got shot', 'been shot', 'were shot']
     #TODO: You will have to write code here to get the weights from the classifier, and print out the weights of the features you are interested in
-
+    for i in xrange(len(feature_names)):
+        if feature_names[i] in rule_words:
+            print feature_names[i] + ': ' + str(clf.coef_[0][i])
+    
 def get_misclassified_examples(y, X, texts) :
     x_train, x_test, y_train, y_test, train_texts, test_texts = train_test_split(X, y, texts)
     clf = train_classifier(x_train, y_train)
@@ -186,7 +200,11 @@ if __name__ == '__main__' :
 
     print '\nStatistical classification'
     y, X, texts, dv, le = get_matricies(raw_data)
+    print 'y'
+    print y.shape
+    print 'x'
+    print X.shape
     cross_validate(X,y)
 
-#    get_top_features(X, y, dv)
+    get_top_features(X, y, dv)
 #    get_misclassified_examples(y, X, texts)
