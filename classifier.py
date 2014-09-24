@@ -36,7 +36,7 @@ def get_features(X) :
         f = {}
         x_lower = [word.translate(string.maketrans('',''), string.punctuation).lower() for word in x.split()]
         for word in x_lower :
-            # if word not in f:
+            #if word not in f:
             #   f[word] = 0
             f[word] = 1
             feature_set.add(word)
@@ -63,7 +63,9 @@ def get_features(X) :
 
 def calculate_best_features(features, feature_set) :
     labels = get_labels()
-    iris = load_iris()
+    print len(features)
+    print len(features[0])
+    print len(labels)
     best_features = SelectKBest(chi2, k=2).fit_transform(features, labels)
     for feature in best_features :
         print feature
