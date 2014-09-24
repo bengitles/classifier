@@ -10,6 +10,9 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.preprocessing import LabelEncoder
 from sklearn.feature_extraction import DictVectorizer
 from sklearn.cross_validation import train_test_split
+from sklearn.datasets import load_iris
+from sklearn.feature_selection import SelectKBest
+from sklearn.feature_selection import chi2
 
 #read in raw data from file and return a list of (label, article) tuples
 def get_data(filename): 
@@ -55,11 +58,17 @@ def get_features(X) :
             f['gun'] = 1
         """
         features.append(f)
-    calculate_feature_distances(features,feature_set)
+    calculate_best_features(features,feature_set)
     return features
 
-def calculate_feature_distances(features, feature_set) :
+def calculate_best_features(features, feature_set) :
     labels = get_labels()
+    iris = load_iris()
+    best_features = SelectKBest(chi2, k=2).fit_transform(features, labels)
+    for feature in best_features :
+        print feature
+    return best_features
+    """
     distances = {}
     #rows are articles, columns are features
     for column in feature_set :
@@ -78,7 +87,7 @@ def calculate_feature_distances(features, feature_set) :
     top_hun_words = sorted(distances.items(), key = lambda x: x[1])[:100]  
     for word, distance in top_hun_words:
       print word + " is " + str(distance) + " away from the labels."      
-
+    """
 #vectorize feature dictionaries and return feature and label matricies
 def get_matricies(data) : 
     dv = DictVectorizer(sparse=True) 
