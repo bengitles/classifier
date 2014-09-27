@@ -74,12 +74,9 @@ def get_features(X) :
             f['gun'] = 1
         """
         features.append(f)
-<<<<<<< HEAD
     #calculate_feature_distances(features,feature_set)
-=======
     #calculate_best_features(features,feature_set)
     print "Num features: " + len(feature_set)
->>>>>>> played around to answer questionnaire
     return features
 
 def calculate_best_features(features, feature_set) :
